@@ -38,7 +38,7 @@ bot.onText(/\/start/, (msg) => {
 
 
 // Handle user interactions based on received messages
-bot.on('message', (msg) => {
+bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const receivedMessage = msg.text.toString().toLowerCase();
 
@@ -73,8 +73,24 @@ bot.on('message', (msg) => {
             (currentAdventureQuestion === 7 && receivedMessage === 'b)') ||
             (currentAdventureQuestion === 8 && receivedMessage === 'c)')
         ) {
-            data.updateData(msg.from.username, 25);
             bot.sendMessage(chatId, 'Correct! you\'ve got 25 point', currentAdventureQuestionPptions);
+            const res = await data.updateData(msg.from.username, 25);
+            if(res.levelFlag && res.level == 1) {
+                bot.sendMessage(chatId, messages.twoLevelAdventureWelcome, { parse_mode: 'Markdown' });
+            } else if(res.levelFlag && res.level == 2) {
+                bot.sendMessage(chatId, messages.threeLevelWelcome, { parse_mode: 'Markdown' });
+            } else if(res.levelFlag && res.level == 3) {
+                bot.sendMessage(chatId, messages.victoryLevelWelcome, { parse_mode: 'Markdown' });
+            }
+        } else if (
+            receivedMessage != 'a)' && 
+            receivedMessage != 'b)' && 
+            receivedMessage != 'c)' && 
+            receivedMessage != 'd)' && 
+            receivedMessage != 'true' && 
+            receivedMessage != 'false'
+        ) {
+            currentAdventureQuestion = -1;
         } else {
             bot.sendMessage(chatId, 'Wrong answer! try again to get 25 point', currentAdventureQuestionPptions);
         }
@@ -109,8 +125,8 @@ bot.on('callback_query', async (callbackQuery) => {
         case 'continue_adventure':
             if(currentAdventureQuestion === 8) {
                 currentAdventureQuestion = -1;
-                const message = `Sharing Telegram Invite Link: Earn 50 points for each successful share for Telegram invite link and X. (100 points)`;
-                bot.sendMessage(chatId, message, { parse_mode: 'Markdown' });
+                const msg = `Sharing Telegram Invite Link: Earn 50 points for each successful share for Telegram invite link and X. (100 points)`;
+                bot.sendMessage(chatId, msg, { parse_mode: 'Markdown' });
             } else {
                 currentAdventureQuestion += 1;
                 await bot.sendMessage(chatId, adventureQuestions[currentAdventureQuestion]?.question, { parse_mode: 'Markdown' });
@@ -118,7 +134,7 @@ bot.on('callback_query', async (callbackQuery) => {
             break;
         case 'cancel_adventure':
             currentAdventureQuestion = -1;
-            await bot.sendMessage(chatId, 'Canceled', { parse_mode: 'Markdown' });
+            // await bot.sendMessage(chatId, `${callbackQuery.message.from.first_name}'s advanture was canceled`, { parse_mode: 'Markdown' });
             break;
         default:
             break;

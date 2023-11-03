@@ -34,20 +34,27 @@ const userRegister = async (username) => {
 const updateData = async (username, pnt) => {
     const data = await getData();
     const currPoint = data[username].point + pnt;
+    let levelFlag = 0;
     let level = data[username].level;
     if (
-        (level == 0 && currPoint > 250 && currPoint < 501)
+        (level == 0 && currPoint >= 250 && currPoint < 500)
         ||
-        (level == 1 && currPoint > 500 && currPoint < 1000)
+        (level == 1 && currPoint >= 500 && currPoint < 1000)
     ){
         level += 1;
+        levelFlag = 1;
     }
-    data[username] = {
+    const updatedData = {
         username,
         point: currPoint,
         level
     }
-    writeData(data)
+    data[username] = updatedData
+    writeData(data);
+    return {
+        ...updatedData,
+        levelFlag
+    };
 }
 
 export default {
