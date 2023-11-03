@@ -125,8 +125,7 @@ bot.on('callback_query', async (callbackQuery) => {
         case 'continue_adventure':
             if(currentAdventureQuestion === 8) {
                 currentAdventureQuestion = -1;
-                const msg = `Sharing Telegram Invite Link: Earn 50 points for each successful share for Telegram invite link and X. (100 points)`;
-                bot.sendMessage(chatId, msg, { parse_mode: 'Markdown' });
+                bot.sendMessage(chatId, messages.howToLevelUp, { parse_mode: 'Markdown' });
             } else {
                 currentAdventureQuestion += 1;
                 await bot.sendMessage(chatId, adventureQuestions[currentAdventureQuestion]?.question, { parse_mode: 'Markdown' });

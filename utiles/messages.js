@@ -100,5 +100,9 @@ export default {
     Only 1000 Golden Apple Passes will ever be available, making this an ultra-exclusive opportunity. You're among the elite, and it's time to seize your place in UNITY!
     
     Stay pawsitive, keep barking up the right tree and you may be one of the select few to forever hold the Golden Apple Pass.
-    `
+    `,
+
+    howToLevelUp: `Sharing Telegram Invite Link: Earn 50 points for each successful share for Telegram invite link and X. (100 points)`,
+
+    
 }
