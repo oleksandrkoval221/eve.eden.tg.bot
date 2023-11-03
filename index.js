@@ -36,11 +36,29 @@ bot.onText(/\/start/, (msg) => {
     data.userRegister(msg.from.username);
 });
 
+// Handle '/shareLink' command and Share Link
+bot.onText(/\/inviteLink/, async (msg) => {
+    const chatId = msg.chat.id;
+    bot.exportChatInviteLink(chatId).then((inviteLink) => {
+        bot.sendMessage(chatId, `
+        Here is the invite link for this group: ${inviteLink}
+        Share this invite link to earn points
+        `);
+    }).catch((error) => {
+        bot.sendMessage(chatId, `Failed to create invite link. Error: ${error}`);
+    });
+});
+
+// Handle when a user joins the group
+bot.on('new_chat_members', (msg) => {
+    const chatId = msg.chat.id;
+    const userId = msg.new_chat_member.id;
+});
 
 // Handle user interactions based on received messages
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
-    const receivedMessage = msg.text.toString().toLowerCase();
+    const receivedMessage = msg.text && msg.text.toString().toLowerCase();
 
     if (receivedMessage === 'treasure hunt') {
         handleTreasureHunt(bot, msg);
@@ -51,19 +69,19 @@ bot.on('message', async (msg) => {
     }
 
     // adventure Question Answer part
-    if(currentAdventureQuestion > -1) {
+    if (currentAdventureQuestion > -1) {
         const currentAdventureQuestionPptions = {
             reply_markup: {
                 inline_keyboard: [
                     [
-                        { text: 'Continue >>', callback_data: 'continue_adventure' }, 
+                        { text: 'Continue >>', callback_data: 'continue_adventure' },
                         { text: 'Cancel', callback_data: 'cancel_adventure' }
                     ],
                 ]
             }
         }
-        if( 
-            (currentAdventureQuestion === 0 && receivedMessage === 'c)') || 
+        if (
+            (currentAdventureQuestion === 0 && receivedMessage === 'c)') ||
             (currentAdventureQuestion === 1 && receivedMessage === 'd)') ||
             (currentAdventureQuestion === 2 && receivedMessage === 'true') ||
             (currentAdventureQuestion === 3 && receivedMessage === 'b)') ||
@@ -73,26 +91,26 @@ bot.on('message', async (msg) => {
             (currentAdventureQuestion === 7 && receivedMessage === 'b)') ||
             (currentAdventureQuestion === 8 && receivedMessage === 'c)')
         ) {
-            bot.sendMessage(chatId, 'Correct! you\'ve got 25 point', currentAdventureQuestionPptions);
+            bot.sendMessage(chatId, 'Congratulations! you\'ve earned 25 point', currentAdventureQuestionPptions);
             const res = await data.updateData(msg.from.username, 25);
-            if(res.levelFlag && res.level == 1) {
+            if (res.levelFlag && res.level == 1) {
                 bot.sendMessage(chatId, messages.twoLevelAdventureWelcome, { parse_mode: 'Markdown' });
-            } else if(res.levelFlag && res.level == 2) {
+            } else if (res.levelFlag && res.level == 2) {
                 bot.sendMessage(chatId, messages.threeLevelWelcome, { parse_mode: 'Markdown' });
-            } else if(res.levelFlag && res.level == 3) {
+            } else if (res.levelFlag && res.level == 3) {
                 bot.sendMessage(chatId, messages.victoryLevelWelcome, { parse_mode: 'Markdown' });
             }
         } else if (
-            receivedMessage != 'a)' && 
-            receivedMessage != 'b)' && 
-            receivedMessage != 'c)' && 
-            receivedMessage != 'd)' && 
-            receivedMessage != 'true' && 
+            receivedMessage != 'a)' &&
+            receivedMessage != 'b)' &&
+            receivedMessage != 'c)' &&
+            receivedMessage != 'd)' &&
+            receivedMessage != 'true' &&
             receivedMessage != 'false'
         ) {
             currentAdventureQuestion = -1;
         } else {
-            bot.sendMessage(chatId, 'Wrong answer! try again to get 25 point', currentAdventureQuestionPptions);
+            bot.sendMessage(chatId, 'Wrong answer! try again to earn 25 point', currentAdventureQuestionPptions);
         }
     }
 });
@@ -123,7 +141,7 @@ bot.on('callback_query', async (callbackQuery) => {
             await bot.sendMessage(chatId, messages.adventureMessage, options);
             break;
         case 'continue_adventure':
-            if(currentAdventureQuestion === 8) {
+            if (currentAdventureQuestion === 8) {
                 currentAdventureQuestion = -1;
                 bot.sendMessage(chatId, messages.howToLevelUp, { parse_mode: 'Markdown' });
             } else {
