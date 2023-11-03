@@ -51,5 +51,6 @@ const updateData = async (username, pnt) => {
 }
 
 export default {
-    userRegister
+    userRegister,
+    updateData
 }

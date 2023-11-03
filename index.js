@@ -33,7 +33,7 @@ bot.onText(/\/start/, (msg) => {
     }
     bot.sendMessage(chatId, messages.welcomeMessage, options);
 
-    data.userRegister(msg.chat.username);
+    data.userRegister(msg.from.username);
 });
 
 
@@ -73,7 +73,7 @@ bot.on('message', (msg) => {
             (currentAdventureQuestion === 7 && receivedMessage === 'b)') ||
             (currentAdventureQuestion === 8 && receivedMessage === 'c)')
         ) {
-            data.updateData(msg.chat.username, 25);
+            data.updateData(msg.from.username, 25);
             bot.sendMessage(chatId, 'Correct! you\'ve got 25 point', currentAdventureQuestionPptions);
         } else {
             bot.sendMessage(chatId, 'Wrong answer! try again to get 25 point', currentAdventureQuestionPptions);
