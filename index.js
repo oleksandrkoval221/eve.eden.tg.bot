@@ -1,9 +1,10 @@
 import dotenv from 'dotenv';
 import TelegramBot from 'node-telegram-bot-api';
 import {
-    handleTreasureHunt,
     handleEducation,
-    handleRewards
+    handleRewards,
+    handleTokens,
+    handleAdventure
 } from './utiles/functions.js'
 
 import messages from "./utiles/messages.js";
@@ -44,6 +45,7 @@ bot.onText(/\/inviteLink/, async (msg) => {
         Here is the invite link for this group: ${inviteLink}
         Share this invite link to earn points
         `);
+        data.updateData(msg.from.username, 50);
     }).catch((error) => {
         bot.sendMessage(chatId, `Failed to create invite link. Error: ${error}`);
     });
@@ -60,12 +62,16 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const receivedMessage = msg.text && msg.text.toString().toLowerCase();
 
-    if (receivedMessage === 'treasure hunt') {
-        handleTreasureHunt(bot, msg);
+    if (receivedMessage === 'adventure') {
+        handleAdventure(bot, msg);
     } else if (receivedMessage === 'learn') {
         handleEducation(bot, msg);
     } else if (receivedMessage === 'rewards') {
         handleRewards(bot, msg);
+    } else if (receivedMessage === 'projects') {
+        bot.sendMessage(chatId, messages.projectMessage, { parse_mode: 'Markdown' });
+    } else if(receivedMessage === 'tokens') {
+        handleTokens(bot, chatId);
     }
 
     // adventure Question Answer part
@@ -125,20 +131,10 @@ bot.on('callback_query', async (callbackQuery) => {
             bot.sendMessage(chatId, messages.projectMessage, { parse_mode: 'Markdown' });
             break;
         case 'tokens':
-            await bot.sendMessage(chatId, messages.tokenMessage, { parse_mode: 'Markdown' });
-            await bot.sendMessage(chatId, messages.eveTokenAddress, { parse_mode: 'Markdown' });
-            await bot.sendMessage(chatId, messages.unityTokenAddress, { parse_mode: 'Markdown' });
-            await bot.sendMessage(chatId, messages.dogechainRouter, { parse_mode: 'HTML' });
+            handleTokens(bot, chatId);
             break;
         case 'adventure':
-            const options = {
-                reply_markup: {
-                    inline_keyboard: [
-                        [{ text: 'Continue Adventure >>', callback_data: 'continue_adventure' }],
-                    ]
-                }
-            }
-            await bot.sendMessage(chatId, messages.adventureMessage, options);
+            handleAdventure(bot, callbackQuery.message);
             break;
         case 'continue_adventure':
             if (currentAdventureQuestion === 8) {
@@ -152,6 +148,9 @@ bot.on('callback_query', async (callbackQuery) => {
         case 'cancel_adventure':
             currentAdventureQuestion = -1;
             // await bot.sendMessage(chatId, `${callbackQuery.message.from.first_name}'s advanture was canceled`, { parse_mode: 'Markdown' });
+            break;
+        case 'rewards':
+            handleRewards(bot, callbackQuery.message);
             break;
         default:
             break;

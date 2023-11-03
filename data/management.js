@@ -59,5 +59,6 @@ const updateData = async (username, pnt) => {
 
 export default {
     userRegister,
-    updateData
+    updateData,
+    getData
 }

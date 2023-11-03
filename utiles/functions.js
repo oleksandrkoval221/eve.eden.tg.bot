@@ -1,20 +1,10 @@
 import riddles from "../static/riddles.js";
+import data from "../data/management.js";
+import messages from "../utiles/messages.js";
 
 // Function to handle the treasure hunt interaction
 function handleTreasureHunt(bot, msg) {
-    const chatId = msg.chat.id;
-    // Read the clues from the JSON file
-    sendClue(bot, chatId, riddles, 0);
-}
-
-// Function to send the clue and link to the user
-function sendClue(bot, chatId, clues, index) {
-    if (index < clues.length) {
-        const clueMessage = clues[index].clue + "\n\n" + "🔗 " + clues[index].link;
-        bot.sendMessage(chatId, clueMessage, { parse_mode: 'Markdown' });
-    } else {
-        bot.sendMessage(chatId, "Congratulations! You've completed the treasure hunt. 🎉");
-    }
+    
 }
 
 // Function to handle the education module
@@ -31,12 +21,14 @@ function handleEducation(bot, msg) {
 }
 
 // Function to handle the rewards system
-function handleRewards(bot, msg) {
+async function handleRewards(bot, msg) {
     const chatId = msg.chat.id;
 
     // Prepare the rewards message dynamically
-    const points = getUserPoints(msg); // Replace with actual user points
-    const engagementLevel = getUserEngagementLevel(msg); // Replace with actual user engagement level
+    const db = await data.getData();
+    const points = db[msg.from.username].point; // Replace with actual user points
+    const level = db[msg.from.username].level;
+    const engagementLevel = level==0?"Paw-tector":level==1?"Barkitect":level==2?'Guardians':"Guardian's Ultimate Triumph"; // Replace with actual user engagement level
 
     const rewardsMessage = `
     Your Rewards and Privileges:
@@ -51,24 +43,31 @@ function handleRewards(bot, msg) {
     bot.sendMessage(chatId, rewardsMessage, { parse_mode: 'Markdown' });
 }
 
-
-// Function to get user points (replace with your data retrieval logic)
-function getUserPoints(msg) {
-    // Implement logic to retrieve user points from user data
-    // For example, you can read from a JSON file or database
-    return 250; // Replace with actual user points
+// Handle adventure
+const handleAdventure = async (bot, msg) => {
+    const chatId = msg.chat.id;
+    const options = {
+        reply_markup: {
+            inline_keyboard: [
+                [{ text: 'Continue Adventure >>', callback_data: 'continue_adventure' }],
+            ]
+        }
+    }
+    await bot.sendMessage(chatId, messages.adventureMessage, options);
 }
-
-// Function to get user engagement level (replace with your data retrieval logic)
-function getUserEngagementLevel(msg) {
-    // Implement logic to retrieve user engagement level from user data
-    // For example, you can read from a JSON file or database
-    return 'Guardian'; // Replace with actual user engagement level
+// Handle Tokens
+const handleTokens = async (bot, chatId) => {
+    await bot.sendMessage(chatId, messages.tokenMessage, { parse_mode: 'Markdown' });
+    await bot.sendMessage(chatId, messages.eveTokenAddress, { parse_mode: 'Markdown' });
+    await bot.sendMessage(chatId, messages.unityTokenAddress, { parse_mode: 'Markdown' });
+    await bot.sendMessage(chatId, messages.dogechainRouter, { parse_mode: 'HTML' });
 }
 
 // Export the functions to be used in other scripts
 export {
     handleTreasureHunt,
     handleEducation,
-    handleRewards
+    handleRewards,
+    handleTokens,
+    handleAdventure
 };
