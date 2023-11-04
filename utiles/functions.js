@@ -1,10 +1,14 @@
+import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
+
 import riddles from "../static/riddles.js";
 import data from "../data/management.js";
 import messages from "../utiles/messages.js";
 
 // Function to handle the treasure hunt interaction
 function handleTreasureHunt(bot, msg) {
-    
+
 }
 
 // Function to handle the education module
@@ -28,7 +32,7 @@ async function handleRewards(bot, msg) {
     const db = await data.getData();
     const points = db[msg.from.username].point; // Replace with actual user points
     const level = db[msg.from.username].level;
-    const engagementLevel = level==0?"Paw-tector":level==1?"Barkitect":level==2?'Guardians':"Guardian's Ultimate Triumph"; // Replace with actual user engagement level
+    const engagementLevel = level == 0 ? "Paw-tector" : level == 1 ? "Barkitect" : level == 2 ? 'Guardians' : "Guardian's Ultimate Triumph"; // Replace with actual user engagement level
 
     const rewardsMessage = `
     Your Rewards and Privileges:
@@ -57,10 +61,45 @@ const handleAdventure = async (bot, msg) => {
 }
 // Handle Tokens
 const handleTokens = async (bot, chatId) => {
-    await bot.sendMessage(chatId, messages.tokenMessage, { parse_mode: 'Markdown' });
-    await bot.sendMessage(chatId, messages.eveTokenAddress, { parse_mode: 'Markdown' });
-    await bot.sendMessage(chatId, messages.unityTokenAddress, { parse_mode: 'Markdown' });
+    const options = {
+        reply_markup: {
+            inline_keyboard: [
+                [
+                    { text: '🌟$EVE', callback_data: 'selected_eve' },
+                    { text: '💎$UNITY', callback_data: 'selected_unity' }
+                ],
+            ]
+        }
+    }
+    await bot.sendMessage(chatId, messages.tokenMessage, options);
     await bot.sendMessage(chatId, messages.dogechainRouter, { parse_mode: 'HTML' });
+}
+
+// 
+const handleTokenPrice = (bot, chatId, selectedToken) => {
+    const url = 'https://api.dextools.io/v1/token';
+    const apiKey = process.env.DEXTOOL_KEY;
+    const chain = 'dogechain';
+    const address = selectedToken=='eve'?'0x70ace47d53a8a2c8bfb6b4e5755291570d2449a3':'0x216778953ea29a5d04f191810fc444b4caf17d7b';
+
+    axios.get(url, {
+        params: {
+            chain: chain,
+            address: address
+        },
+        headers: {
+            'accept': 'application/json',
+            'X-API-Key': apiKey
+        }
+    })
+        .then(response => {
+            const { data } = response.data;
+            const price = data.reprPair.price;
+            bot.sendMessage(chatId, `The current price of ${data.name} on Dextools.io is ${price}`, { parse_mode: 'Markdown' });
+        })
+        .catch(error => {
+            console.error(error);
+        });
 }
 
 // Export the functions to be used in other scripts
@@ -69,5 +108,7 @@ export {
     handleEducation,
     handleRewards,
     handleTokens,
-    handleAdventure
+    handleAdventure,
+
+    handleTokenPrice
 };

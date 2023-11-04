@@ -21,15 +21,13 @@ export default {
 
     tokenMessage: `
         💰 Tokens powering #muchlove
+    `,
+
+    selectedTokenMesssage: `
         Make your selection to activate the following short codes:
         /price - Get the current price.
         /chart - Retrieve a price chart.
         /trade - Access trading options.
-        /balance - Check your token balance.
-        /buy - Buy  tokens.
-        /sell - Sell tokens. 
-
-        💎 $UNITY | 🌟$EVE
     `,
 
     eveTokenAddress: `
@@ -104,5 +102,5 @@ export default {
 
     howToLevelUp: `Sharing Telegram Invite Link: Earn 50 points for each successful share for Telegram invite link and X. (100 points)`,
 
-    
+
 }

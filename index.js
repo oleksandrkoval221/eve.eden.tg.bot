@@ -1,12 +1,14 @@
 import dotenv from 'dotenv';
 import TelegramBot from 'node-telegram-bot-api';
+
 import {
     handleEducation,
     handleRewards,
     handleTokens,
-    handleAdventure
-} from './utiles/functions.js'
+    handleAdventure,
 
+    handleTokenPrice
+} from './utiles/functions.js'
 import messages from "./utiles/messages.js";
 import data from "./data/management.js";
 import adventureQuestions from "./static/adventureQuestions.js";
@@ -18,6 +20,7 @@ const botToken = process.env.BOT_TOKEN; // Replace with your actual bot token
 const bot = new TelegramBot(botToken, { polling: true });
 
 let currentAdventureQuestion = -1;
+let selectedToken = 'eve';
 // variables -------------------------------------------------------------------
 
 // Handle '/start' command
@@ -51,6 +54,22 @@ bot.onText(/\/inviteLink/, async (msg) => {
     });
 });
 
+// Handle Token price
+bot.onText(/\/price/, async (msg) => {
+    const chatId = msg.chat.id;
+    handleTokenPrice(bot, chatId, selectedToken);
+});
+// Handle Token chart
+bot.onText(/\/chart/, async (msg) => {
+    const chatId = msg.chat.id;
+    const chartUrl = selectedToken=='eve'?`https://www.dextools.io/app/en/dogechain/pair-explorer/0x7cdbcffa27a762fb1a951994da9524cf20f6c2f5`:`https://www.dextools.io/app/en/dogechain/pair-explorer/0x7f163d849b45a08a7a16fcac67e4a60888cb5489`;
+    bot.sendMessage(chatId, chartUrl);
+});
+bot.onText(/\/trade/, async (msg) => {
+    const chatId = msg.chat.id;
+    await bot.sendMessage(chatId, `Trade swiftly and securely – get the DogeGuard.dog Wallet for top-notch DogeChain transactions.`, { parse_mode: 'HTML' });
+});
+
 // Handle when a user joins the group
 bot.on('new_chat_members', (msg) => {
     const chatId = msg.chat.id;
@@ -70,7 +89,7 @@ bot.on('message', async (msg) => {
         handleRewards(bot, msg);
     } else if (receivedMessage === 'projects') {
         bot.sendMessage(chatId, messages.projectMessage, { parse_mode: 'Markdown' });
-    } else if(receivedMessage === 'tokens') {
+    } else if (receivedMessage === 'tokens') {
         handleTokens(bot, chatId);
     }
 
@@ -151,6 +170,15 @@ bot.on('callback_query', async (callbackQuery) => {
             break;
         case 'rewards':
             handleRewards(bot, callbackQuery.message);
+            break;
+    
+        case 'selected_eve':
+            selectedToken = 'eve';
+            bot.sendMessage(chatId, `🌟$EVE \n`+messages.selectedTokenMesssage);
+            break;
+        case 'selected_unity':
+            selectedToken = 'unity';
+            bot.sendMessage(chatId, `💎$UNITY \n`+messages.selectedTokenMesssage);
             break;
         default:
             break;
