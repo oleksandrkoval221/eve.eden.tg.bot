@@ -28,8 +28,9 @@ function handleEducation(bot, msg) {
 async function handleRewards(bot, chatId, user) {
     // Prepare the rewards message dynamically
     const db = await data.getData();
-    const points = db[user.username].point; // Replace with actual user points
-    const level = db[user.username].level;
+    if (!user) return; 
+    const points = db[user?.username].point; // Replace with actual user points
+    const level = db[user?.username].level;
     const engagementLevel = level == 0 ? "Paw-tector" : level == 1 ? "Barkitect" : level == 2 ? 'Guardians' : "Guardian's Ultimate Triumph"; // Replace with actual user engagement level
 
     const rewardsMessage = `

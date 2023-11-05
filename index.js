@@ -78,8 +78,9 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatId, messages.projectMessage, { parse_mode: 'Markdown' });
     } else if (receivedMessage === 'tokens') {
         handleTokens(bot, chatId);
-    } else if (receivedMessage === 'sharelink') {
-        handleShareTg(bot, msg);
+    // } else if (receivedMessage === 'sharelink') {
+    //     handleShareTg(bot, msg, msg.from);
+    //     handleShareDogLink(bot, msg, msg.from)
     // } else if (receivedMessage === 'testchat') {
     //     bot.sendMessage(msg.from.id, `this is test private message`);
     }
