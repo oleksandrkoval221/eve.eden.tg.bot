@@ -3,11 +3,6 @@ export default {
         Ready for the #muchlove experience? 🚀
 
         Simplify your journey! Explore projects, collect tokens, enjoy adventures, and claim epic rewards. It's all here, make a selection:
-
-        🐾 Projects
-        💰 Tokens
-        🗺 Adventure
-        🎁 Rewards
     `,
 
     projectMessage: `
@@ -46,9 +41,6 @@ export default {
     Join the adventure, earn rewards, and experience the magic of #muchlove in the DogeChain! 🌌🐕🚀
 
     📣 Ready for your first steps? Spread #muchlove using the buttons below.
-
-    BUTTONS > TELEGRAM and X share links and DOGEGUARD.DOG
-
     `,
 
     twoLevelAdventureWelcome: `

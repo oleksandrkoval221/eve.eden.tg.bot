@@ -6,7 +6,8 @@ import {
     handleRewards,
     handleTokens,
     handleAdventure,
-
+    handleShareTg,
+    handleShareDogLink,
     handleTokenPrice
 } from './utiles/functions.js'
 import messages from "./utiles/messages.js";
@@ -30,28 +31,14 @@ bot.onText(/\/start/, (msg) => {
     const options = {
         reply_markup: {
             inline_keyboard: [
-                [{ text: 'Projects', callback_data: 'projects' }, { text: 'Tokens', callback_data: 'tokens' }],
-                [{ text: 'Adventure', callback_data: 'adventure' }, { text: 'Rewards', callback_data: 'rewards' }]
+                [{ text: '🐾 Projects', callback_data: 'projects' }, { text: '💰 Tokens', callback_data: 'tokens' }],
+                [{ text: '🗺 Adventure', callback_data: 'adventure' }, { text: '🎁 Rewards', callback_data: 'rewards' }]
             ]
         }
     }
     bot.sendMessage(chatId, messages.welcomeMessage, options);
 
     data.userRegister(msg.from.username);
-});
-
-// Handle '/shareLink' command and Share Link
-bot.onText(/\/inviteLink/, async (msg) => {
-    const chatId = msg.chat.id;
-    bot.exportChatInviteLink(chatId).then((inviteLink) => {
-        bot.sendMessage(chatId, `
-        Here is the invite link for this group: ${inviteLink}
-        Share this invite link to earn points
-        `);
-        data.updateData(msg.from.username, 50);
-    }).catch((error) => {
-        bot.sendMessage(chatId, `Failed to create invite link. Error: ${error}`);
-    });
 });
 
 // Handle Token price
@@ -91,6 +78,10 @@ bot.on('message', async (msg) => {
         bot.sendMessage(chatId, messages.projectMessage, { parse_mode: 'Markdown' });
     } else if (receivedMessage === 'tokens') {
         handleTokens(bot, chatId);
+    } else if (receivedMessage === 'sharelink') {
+        handleShareTg(bot, msg);
+    // } else if (receivedMessage === 'testchat') {
+    //     bot.sendMessage(msg.from.id, `this is test private message`);
     }
 
     // adventure Question Answer part
@@ -144,6 +135,7 @@ bot.on('message', async (msg) => {
 bot.on('callback_query', async (callbackQuery) => {
     const chatId = callbackQuery.message.chat.id;
     const buttonData = callbackQuery.data;
+    const user_id = callbackQuery.from.id;
 
     switch (buttonData) {
         case 'projects':
@@ -161,17 +153,22 @@ bot.on('callback_query', async (callbackQuery) => {
                 bot.sendMessage(chatId, messages.howToLevelUp, { parse_mode: 'Markdown' });
             } else {
                 currentAdventureQuestion += 1;
-                await bot.sendMessage(chatId, adventureQuestions[currentAdventureQuestion]?.question, { parse_mode: 'Markdown' });
+                await bot.sendMessage(user_id, adventureQuestions[currentAdventureQuestion]?.question);
             }
+            break;
+        case 'share_tg_link':
+            handleShareTg(bot, callbackQuery.message, callbackQuery.from);
+            break
+        case 'share_doglink':
+            handleShareDogLink(bot, callbackQuery.message, callbackQuery.from);
             break;
         case 'cancel_adventure':
             currentAdventureQuestion = -1;
-            // await bot.sendMessage(chatId, `${callbackQuery.message.from.first_name}'s advanture was canceled`, { parse_mode: 'Markdown' });
+            // await bot.sendMessage(chatId, `${callbackQuery.from.first_name}'s advanture was canceled`, { parse_mode: 'Markdown' });
             break;
         case 'rewards':
-            handleRewards(bot, callbackQuery.message);
+            handleRewards(bot, callbackQuery.message.chat.id, callbackQuery.from);
             break;
-    
         case 'selected_eve':
             selectedToken = 'eve';
             bot.sendMessage(chatId, `🌟$EVE \n`+messages.selectedTokenMesssage);

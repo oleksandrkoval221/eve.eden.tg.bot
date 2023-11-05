@@ -25,13 +25,11 @@ function handleEducation(bot, msg) {
 }
 
 // Function to handle the rewards system
-async function handleRewards(bot, msg) {
-    const chatId = msg.chat.id;
-
+async function handleRewards(bot, chatId, user) {
     // Prepare the rewards message dynamically
     const db = await data.getData();
-    const points = db[msg.from.username].point; // Replace with actual user points
-    const level = db[msg.from.username].level;
+    const points = db[user.username].point; // Replace with actual user points
+    const level = db[user.username].level;
     const engagementLevel = level == 0 ? "Paw-tector" : level == 1 ? "Barkitect" : level == 2 ? 'Guardians' : "Guardian's Ultimate Triumph"; // Replace with actual user engagement level
 
     const rewardsMessage = `
@@ -54,10 +52,15 @@ const handleAdventure = async (bot, msg) => {
         reply_markup: {
             inline_keyboard: [
                 [{ text: 'Continue Adventure >>', callback_data: 'continue_adventure' }],
+                [
+                    { text: 'Share TELEGRAM and X links', callback_data: 'share_tg_link' },
+                    { text: 'Share DOGEGUARD.DOG', callback_data: 'share_doglink' },
+                ],
             ]
         }
     }
     await bot.sendMessage(chatId, messages.adventureMessage, options);
+    await bot.sendMessage(chatId, `I\'ll send you a private message to get started if you start adventure`);
 }
 // Handle Tokens
 const handleTokens = async (bot, chatId) => {
@@ -102,6 +105,25 @@ const handleTokenPrice = (bot, chatId, selectedToken) => {
         });
 }
 
+const handleShareTg = (bot, msg, user) => {
+    const chatId = msg.chat.id;
+    bot.exportChatInviteLink(chatId).then((inviteLink) => {
+        bot.sendMessage(chatId, `
+        Here is the invite link for this group: ${inviteLink}
+        Share this invite link to earn points
+        `);
+        data.updateData(user.username, 50);
+    }).catch((error) => {
+        bot.sendMessage(chatId, `Failed to create invite link. Error: ${error}`);
+    });
+}
+
+const handleShareDogLink = (bot, msg, user) => {
+    const chatId = msg.chat.id;
+    bot.sendMessage(chatId, `https://dogeguard.dog/`);
+    data.updateData(user.username, 50);
+}
+
 // Export the functions to be used in other scripts
 export {
     handleTreasureHunt,
@@ -109,6 +131,7 @@ export {
     handleRewards,
     handleTokens,
     handleAdventure,
-
-    handleTokenPrice
+    handleTokenPrice,
+    handleShareDogLink,
+    handleShareTg
 };

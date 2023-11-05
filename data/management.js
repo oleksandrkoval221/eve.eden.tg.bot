@@ -33,7 +33,9 @@ const userRegister = async (username) => {
  */
 const updateData = async (username, pnt) => {
     const data = await getData();
-    const currPoint = data[username].point + pnt;
+    if (!data[username]) return;
+    
+    const currPoint = data[username]?.point + pnt;
     let levelFlag = 0;
     let level = data[username].level;
     if (
