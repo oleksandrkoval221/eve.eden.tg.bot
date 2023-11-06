@@ -67,6 +67,7 @@ bot.on('new_chat_members', (msg) => {
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const receivedMessage = msg.text && msg.text.toString().toLowerCase();
+    data.userRegister(msg.from.username);
 
     if (receivedMessage === 'adventure') {
         handleAdventure(bot, msg);

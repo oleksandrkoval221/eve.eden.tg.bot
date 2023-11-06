@@ -16,6 +16,8 @@ const writeData = async (data) => {
  */
 const userRegister = async (username) => {
     const data = await getData();
+    if (data[username]) return;
+    
     data[username] = data[username] ? {
         ...data[username]
     }: {
