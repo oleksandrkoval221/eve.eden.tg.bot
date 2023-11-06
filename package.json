@@ -4,8 +4,8 @@
   "description": "Empower Voices Everywhere",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js",
-    "server": "node index.js"
+    "start": "nodemon app.js",
+    "server": "node app.js"
   },
   "dependencies": {
     "axios": "^1.6.0",
