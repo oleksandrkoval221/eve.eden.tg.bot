@@ -61,7 +61,7 @@ const handleAdventure = async (bot, msg) => {
         }
     }
     await bot.sendMessage(chatId, messages.adventureMessage, options);
-    await bot.sendMessage(chatId, `I\'ll send you a private message to get started if you start adventure`);
+    await bot.sendMessage(chatId, `💬 DMs will become your portal to our adventure! 🌕✨`);
 }
 // Handle Tokens
 const handleTokens = async (bot, chatId) => {

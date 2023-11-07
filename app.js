@@ -60,14 +60,24 @@ bot.onText(/\/trade/, async (msg) => {
 // Handle when a user joins the group
 bot.on('new_chat_members', (msg) => {
     const chatId = msg.chat.id;
-    const userId = msg.new_chat_member.id;
+
+    const options = {
+        reply_markup: {
+            inline_keyboard: [
+                [{ text: '🐾 Projects', callback_data: 'projects' }, { text: '💰 Tokens', callback_data: 'tokens' }],
+                [{ text: '🗺 Adventure', callback_data: 'adventure' }, { text: '🎁 Rewards', callback_data: 'rewards' }]
+            ]
+        }
+    }
+    bot.sendMessage(chatId, messages.welcomeMessage, options);
+
+    data.userRegister(msg.from.username);
 });
 
 // Handle user interactions based on received messages
 bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const receivedMessage = msg.text && msg.text.toString().toLowerCase();
-    data.userRegister(msg.from.username);
 
     if (receivedMessage === 'adventure') {
         handleAdventure(bot, msg);
@@ -150,6 +160,8 @@ bot.on('callback_query', async (callbackQuery) => {
             handleAdventure(bot, callbackQuery.message);
             break;
         case 'continue_adventure':
+            if (callbackQuery.from.is_bot) return;
+
             if (currentAdventureQuestion === 8) {
                 currentAdventureQuestion = -1;
                 bot.sendMessage(chatId, messages.howToLevelUp, { parse_mode: 'Markdown' });
