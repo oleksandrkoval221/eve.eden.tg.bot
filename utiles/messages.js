@@ -1,8 +1,10 @@
 export default {
     welcomeMessage: `
-        Ready for the #muchlove experience? 🚀
+        Ready to dive into the #muchlove UNITY experience? 🚀
+        https://www.business2community.com/wp-content/uploads/2022/08/Dogechain-1.png
 
-        Simplify your journey! Explore projects, collect tokens, enjoy adventures, and claim epic rewards. It's all here, make a selection:
+        Let's make your journey simple! Discover projects, gather tokens, embark on adventures, and grab fantastic rewards. It's all here.
+        ⚠️ Stay safe, fam, and always remember: Admins WILL NEVER DM YOU FIRST!" 🌟🐾
     `,
 
     projectMessage: `

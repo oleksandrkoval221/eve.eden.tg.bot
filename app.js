@@ -24,8 +24,7 @@ let currentAdventureQuestion = -1;
 let selectedToken = 'eve';
 // variables -------------------------------------------------------------------
 
-// Handle '/start' command
-bot.onText(/\/start/, (msg) => {
+const startMsg = async (msg) => {
     const chatId = msg.chat.id;
 
     const options = {
@@ -36,9 +35,14 @@ bot.onText(/\/start/, (msg) => {
             ]
         }
     }
-    bot.sendMessage(chatId, messages.welcomeMessage, options);
+    await bot.sendMessage(chatId, messages.welcomeMessage, options);
 
     data.userRegister(msg.from.username);
+}
+
+// Handle '/start' command
+bot.onText(/\/start/, (msg) => {
+    startMsg(msg);
 });
 
 // Handle Token price
@@ -59,19 +63,7 @@ bot.onText(/\/trade/, async (msg) => {
 
 // Handle when a user joins the group
 bot.on('new_chat_members', (msg) => {
-    const chatId = msg.chat.id;
-
-    const options = {
-        reply_markup: {
-            inline_keyboard: [
-                [{ text: '🐾 Projects', callback_data: 'projects' }, { text: '💰 Tokens', callback_data: 'tokens' }],
-                [{ text: '🗺 Adventure', callback_data: 'adventure' }, { text: '🎁 Rewards', callback_data: 'rewards' }]
-            ]
-        }
-    }
-    bot.sendMessage(chatId, messages.welcomeMessage, options);
-
-    data.userRegister(msg.from.username);
+    startMsg(msg)
 });
 
 // Handle user interactions based on received messages
