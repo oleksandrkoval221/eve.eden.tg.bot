@@ -158,8 +158,22 @@ bot.on('callback_query', async (callbackQuery) => {
                 currentAdventureQuestion = -1;
                 bot.sendMessage(chatId, messages.howToLevelUp, { parse_mode: 'Markdown' });
             } else {
-                currentAdventureQuestion += 1;
-                await bot.sendMessage(user_id, adventureQuestions[currentAdventureQuestion]?.question);
+                try {
+                    currentAdventureQuestion += 1;
+                    await bot.sendMessage(user_id, adventureQuestions[currentAdventureQuestion]?.question);
+                } catch (error) {
+                    bot.getMe().then((info) => {
+                        const dmLink = `https://t.me/${info.username}`;
+                        bot.sendMessage(chatId, `
+                        ${callbackQuery.from.first_name}, I can't make DM with you
+                        Please make DM yourside: ${dmLink}
+                        And try again the adventure
+                        `);
+                    }).catch((error) => {
+                        bot.sendMessage(chatId, `Failed to create invite link. Error: ${error}`);
+                    });
+                    // bot.sendMessage(chatId, `${callbackQuery.from.first_name} ${error}`)
+                }
             }
             break;
         case 'share_tg_link':

@@ -2,14 +2,8 @@ import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import riddles from "../static/riddles.js";
 import data from "../data/management.js";
 import messages from "../utiles/messages.js";
-
-// Function to handle the treasure hunt interaction
-function handleTreasureHunt(bot, msg) {
-
-}
 
 // Function to handle the education module
 function handleEducation(bot, msg) {
@@ -17,9 +11,10 @@ function handleEducation(bot, msg) {
     const educationMessage = `
     Learn about our projects:
 
-    1. [Eden.dog](https://yourprojecturl.com/eden): A platform for community exploration and growth.
-    2. [DogeGuard.dog](https://yourprojecturl.com/guard): Ensuring safety and security for all community members.
-    3. [DogeLoveStory.dog](https://yourprojecturl.com/love): A heartwarming journey of love in the crypto world.
+    1. [Eden.dog](https://eden.dog.dog/): A platform for community exploration and growth.
+    2. [DogeGuard.dog](https://dogeguard.dog): Ensuring safety and security for all community members.
+    3. [DogeLoveStory.dog](https://dogelovestory.dog): A heartwarming journey of love in the crypto world.
+    3. [BuildaDoge.dog](https://buildadoge.dog): Advanced token creation for the biggest of ideas.
     `;
     bot.sendMessage(chatId, educationMessage, { parse_mode: 'Markdown' });
 }
@@ -52,16 +47,16 @@ const handleAdventure = async (bot, msg) => {
     const options = {
         reply_markup: {
             inline_keyboard: [
-                [{ text: 'Continue Adventure >>', callback_data: 'continue_adventure' }],
                 [
-                    { text: 'Share TELEGRAM and X links', callback_data: 'share_tg_link' },
-                    { text: 'Share DOGEGUARD.DOG', callback_data: 'share_doglink' },
+                    { text: '📢 SHARE UNITY', callback_data: 'share_tg_link' },
+                    { text: '🔑 DOGEGUARD.DOG', callback_data: 'share_doglink' },
                 ],
-            ]
+				[{ text: 'Continue Adventure >>', callback_data: 'continue_adventure' }],
+                ]
         }
     }
     await bot.sendMessage(chatId, messages.adventureMessage, options);
-    await bot.sendMessage(chatId, `💬 DMs will become your portal to our adventure! 🌕✨`);
+    await bot.sendMessage(chatId, `💬 Check your DMs it will become your portal to our adventure! 🌕✨`);
 }
 // Handle Tokens
 const handleTokens = async (bot, chatId) => {
@@ -111,7 +106,7 @@ const handleShareTg = (bot, msg, user) => {
     bot.exportChatInviteLink(chatId).then((inviteLink) => {
         bot.sendMessage(chatId, `
         Here is the invite link for this group: ${inviteLink}
-        Share this invite link to earn points
+        Share this invite because it is no fun to play alone.
         `);
         data.updateData(user.username, 50);
     }).catch((error) => {
@@ -127,7 +122,6 @@ const handleShareDogLink = (bot, msg, user) => {
 
 // Export the functions to be used in other scripts
 export {
-    handleTreasureHunt,
     handleEducation,
     handleRewards,
     handleTokens,

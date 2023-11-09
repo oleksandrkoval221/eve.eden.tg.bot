@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "nodemon app.js",
-    "server": "node app.js"
+	"server": "node app.js"
   },
   "dependencies": {
     "axios": "^1.6.0",

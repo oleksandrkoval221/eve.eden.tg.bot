@@ -1,19 +1,23 @@
 export default {
-    welcomeMessage: `
+   welcomeMessage: `
         Ready to dive into the #muchlove UNITY experience? 🚀
-        https://www.business2community.com/wp-content/uploads/2022/08/Dogechain-1.png
-
+        
         Let's make your journey simple! Discover projects, gather tokens, embark on adventures, and grab fantastic rewards. It's all here.
         ⚠️ Stay safe, fam, and always remember: Admins WILL NEVER DM YOU FIRST!" 🌟🐾
+        https://dogeguard.dog/welcome_to_UNITY.jpg
     `,
 
     projectMessage: `
-        🚀 Thank you for your curiosity in our projects! We're thrilled to share the magic of our UNITY ecosystem with you. Check pinned posts too.
+🚀 Thank you for embarking on this curious journey into our projects! We're over the moon to unveil the enchantment of our UNITY ecosystem. You can explore each project below and find more inside our pinned posts. 🌟🐾
 
-        1️⃣ DogeLoveStory.dog $EVE herself
-        2️⃣ DogeGuard.dog: Store, Swap, Social
-        3️⃣ Eden.dog: Our Garden
-        4️⃣ BuildaDoge.dog: Advanced Builder
+1️⃣ DogeLoveStory.dog
+$EVE our community token
+2️⃣ DogeGuard.dog:
+Store, Swap, Stake & Social
+3️⃣ Eden.dog:
+Our Garden
+4️⃣ BuildaDoge.dog:
+Advanced Token Builder
     `,
 
     tokenMessage: `
@@ -21,8 +25,8 @@ export default {
     `,
 
     selectedTokenMesssage: `
-        Make your selection to activate the following short codes:
-        /price - Get the current price.
+        Pick your power with these short codes:
+        /price - View the current price.
         /chart - Retrieve a price chart.
         /trade - Access trading options.
     `,
@@ -35,12 +39,12 @@ export default {
         unity: 0x216778953ea29a5d04f191810fc444b4caf17d7b
         https://www.dextools.io/app/en/dogechain/pair-explorer/0x7f163d849b45a08a7a16fcac67e4a60888cb5489
     `,
-    dogechainRouter:`ChewySwap.dog DogeChain Router: <code>0x45AFCf57F7e3F3B9cA70335E5E85e4F77DcC5087</code>`,
+    dogechainRouter:`Swap on DogeGuard.dog – it's a pawsitive experience fueled by ChewySwap! 🦴🐾`,
 
     adventureMessage: `
-    🔓 Congrats Paw-tector (0-250 points) your adventure has already begun, 🐾 and we're thrilled to have you on board. Share and set up your wallet as your first steps into our beloved DogeChain and uncover its secrets.
+    🔓 Your adventure has already begun, you are a Paw-tector (0-250 points) Congrats. 🐾 We're thrilled to have you on board. Share and set up your wallet as your first steps into our beloved DogeChain and uncover its secrets.
 
-    Join the adventure, earn rewards, and experience the magic of #muchlove in the DogeChain! 🌌🐕🚀
+    Join the adventure, earn rewards, and experience the magic of #muchlove on the DogeChain! 🌌🐕🚀
 
     📣 Ready for your first steps? Spread #muchlove using the buttons below.
     `,
@@ -94,7 +98,7 @@ export default {
     Stay pawsitive, keep barking up the right tree and you may be one of the select few to forever hold the Golden Apple Pass.
     `,
 
-    howToLevelUp: `Sharing Telegram Invite Link: Earn 50 points for each successful share for Telegram invite link and X. (100 points)`,
+    howToLevelUp: `Accumulate points with each triumphant task during your adventure. Engagement equals rewards. 🚀🌟`,
 
 
 }
